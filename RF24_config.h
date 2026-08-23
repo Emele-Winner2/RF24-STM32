@@ -1,65 +1,75 @@
-
 /*
- Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
-
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+ * RF24_config.h
+ *
+ *  Created on: 22 Aug 2026
+ *      Author: Ekemini Udofia
  */
 
-#ifndef __RF24_CONFIG_H__
-#define __RF24_CONFIG_H__
+#ifndef INC_RF24_CONFIG_H_
+#define INC_RF24_CONFIG_H_
 
-#if ARDUINO < 100
-#include <WProgram.h>
-#else
-#include <Arduino.h>
-#endif
 
-#include <stddef.h>
-
-// Stuff that is normally provided by Arduino
-#ifdef ARDUINO
-#include <SPI.h>
-#else
 #include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-extern HardwareSPI SPI;
-#define _BV(x) (1<<(x))
+
+#include "main.h"
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#undef SERIAL_DEBUG
-#ifdef SERIAL_DEBUG
-#define IF_SERIAL_DEBUG(x) ({x;})
+// Universal STM32 HAL Inclusions
+#if defined(STM32F0)
+    #include "stm32f0xx_hal.h"
+#elif defined(STM32F1)
+    #include "stm32f1xx_hal.h"
+#elif defined(STM32F2)
+    #include "stm32f2xx_hal.h"
+#elif defined(STM32F3)
+    #include "stm32f3xx_hal.h"
+#elif defined(STM32F4)
+    #include "stm32f4xx_hal.h"
+#elif defined(STM32F7)
+    #include "stm32f7xx_hal.h"
+#elif defined(STM32G0)
+    #include "stm32g0xx_hal.h"
+#elif defined(STM32G4)
+    #include "stm32g4xx_hal.h"
+#elif defined(STM32H7)
+    #include "stm32h7xx_hal.h"
+#elif defined(STM32L0)
+    #include "stm32l0xx_hal.h"
+#elif defined(STM32L1)
+    #include "stm32l1xx_hal.h"
+#elif defined(STM32L4)
+    #include "stm32l4xx_hal.h"
+#elif defined(STM32L5)
+    #include "stm32l5xx_hal.h"
+#elif defined(STM32WB)
+    #include "stm32wbxx_hal.h"
+#elif defined(STM32WL)
+    #include "stm32wlxx_hal.h"
+#elif defined(STM32C0)
+    #include "stm32c0xx_hal.h"
+#elif defined(STM32U5)
+    #include "stm32u5xx_hal.h"
 #else
-#define IF_SERIAL_DEBUG(x)
+    // #error "RF24: Target STM32 family not defined."
 #endif
 
-// Avoid spurious warnings
-#if 1
-#if ! defined( NATIVE ) && defined( ARDUINO )
-#undef PROGMEM
-#define PROGMEM __attribute__(( section(".progmem.data") ))
-#undef PSTR
-#define PSTR(s) (__extension__({static const char __c[] PROGMEM = (s); &__c[0];}))
-#endif
+#ifndef _BV
+#define _BV(x) (1UL << (x))
 #endif
 
-// Progmem is Arduino-specific
-#ifdef ARDUINO
-#include <avr/pgmspace.h>
-#define PRIPSTR "%S"
-#else
-typedef char const char;
-typedef uint16_t prog_uint16_t;
-#define PSTR(x) (x)
-#define printf_P printf
-#define strlen_P strlen
-#define PROGMEM
-#define pgm_read_word(p) (*(p)) 
-#define PRIPSTR "%s"
+#ifndef min
+#define min(a,b) ((a) < (b) ? (a) : (b))
 #endif
 
-#endif // __RF24_CONFIG_H__
-// vim:ai:cin:sts=2 sw=2 ft=cpp
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* INC_RF24_CONFIG_H_ */
