@@ -243,7 +243,7 @@ void setChannel(const RF24 *radio, uint8_t channel) {
   // TODO: This method could take advantage of the 'wide_band' calculation
   // done in setChannel() to require certain channel spacing.
 
-  const uint8_t max_channel = 127;
+  const uint8_t max_channel = 126;
   write_register(radio, RF_CH, min(channel, max_channel));
 }
 
